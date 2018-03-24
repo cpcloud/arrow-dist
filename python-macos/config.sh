@@ -152,10 +152,13 @@ function build_wheel {
            --with-plasma --with-orc --with-parquet \
            --bundle-arrow-cpp --bundle-boost --boost-namespace=arrow_boost \
            bdist_wheel
-    ls -l dist/
-    for wheel in dist/*.whl; do
-	unzip -l "$wheel"
-    done
+    wheeldir="$PWD/dist"
     popd
     popd
+
+    pip install pandas
+    pip install --no-index --find-links="$wheeldir" pyarrow
+
+    python -c 'import pyarrow'
+    python -c 'import pyarrow.parquet'
 }
