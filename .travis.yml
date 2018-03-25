@@ -122,6 +122,10 @@ script:
 after_success:
 - echo "After success"
 - pwd
+before_deploy:
+- echo "Before deploy"
+- pwd
+- ls
 deploy:
   provider: bintray
   file: descriptor.json
