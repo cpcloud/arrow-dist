@@ -144,7 +144,7 @@ function build_wheel {
     export PYARROW_WITH_PLASMA=1
     export PYARROW_BUNDLE_BOOST=1
     export PYARROW_BUNDLE_ARROW_CPP=1
-    export PYARROW_BUILD_TYPE='release'
+    export PYARROW_BUILD_TYPE=Release
     export PYARROW_CMAKE_OPTIONS="-DBOOST_ROOT=$arrow_boost_dist"
     export SETUPTOOLS_SCM_PRETEND_VERSION=$PYARROW_VERSION
     pushd python
@@ -153,6 +153,12 @@ function build_wheel {
            --bundle-arrow-cpp --bundle-boost --boost-namespace=arrow_boost \
            bdist_wheel
     wheeldir="$PWD/dist"
+    for whl in $wheeldir/*.whl; do
+	unzip -l "$whl"
+    done
+    site_packages_dir="$(python -c 'import site; print("\n".join(site.getsitepackages()))')"
+    echo "Showing dylib deps of libarrow"
+    otool -L "$site_packages_dir"/pyarrow/libarrow.0.dylib
     popd
     popd
 
