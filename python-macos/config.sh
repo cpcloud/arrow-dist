@@ -162,7 +162,7 @@ function build_wheel {
     popd
     popd
 
-    pip install pandas
+    pip install pandas 'futures; python < "3"'
     pip install --no-index --find-links="$wheeldir" pyarrow
 
     python -c 'import pyarrow'
