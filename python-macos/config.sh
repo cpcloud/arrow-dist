@@ -145,11 +145,12 @@ function build_wheel {
     #export PYARROW_BUNDLE_BOOST=1
     #export PYARROW_BUNDLE_ARROW_CPP=1
     export PYARROW_BUILD_TYPE=Release
-    export PYARROW_CMAKE_OPTIONS="-DBOOST_ROOT=$arrow_boost_dist -DBoost_NAMESPACE=arrow_boost"
+    export PYARROW_CMAKE_OPTIONS="-DBOOST_ROOT=$arrow_boost_dist"
     export SETUPTOOLS_SCM_PRETEND_VERSION=$PYARROW_VERSION
     pushd python
     python setup.py build_ext \
            --with-plasma --with-orc --with-parquet \
+	   --boost-namespace=arrow_boost \
            bdist_wheel
     wheeldir="$PWD/dist"
 
@@ -157,7 +158,9 @@ function build_wheel {
 
     for whl in $wheeldir/*.whl; do
 	unzip -l "$whl"
-	delocate-wheel -L "$arrow_boost_dist/lib" -v "$whl"
+	pushd "$arrow_boost_dist/lib"
+	delocate-wheel -L . -v "$whl"
+	popd
     done
     popd
     popd
