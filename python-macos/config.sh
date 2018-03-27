@@ -153,12 +153,13 @@ function build_wheel {
            --bundle-arrow-cpp --bundle-boost --boost-namespace=arrow_boost \
            bdist_wheel
     wheeldir="$PWD/dist"
+
+    pip install  'delocate==0.7.3'
+
     for whl in $wheeldir/*.whl; do
 	unzip -l "$whl"
+	delocate-wheel -L . -v "$whl"
     done
-    site_packages_dir="$(python -c 'import site; print("\n".join(site.getsitepackages()))')"
-    echo "Showing dylib deps of libarrow"
-    otool -L "$site_packages_dir"/pyarrow/libarrow.0.dylib
     popd
     popd
 
