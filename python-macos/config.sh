@@ -157,7 +157,7 @@ function build_wheel {
 
     for whl in $wheeldir/*.whl; do
 	unzip -l "$whl"
-	delocate-wheel -L . -v "$whl"
+	delocate-wheel -L "$arrow_boost_dist/lib" -v "$whl"
     done
     popd
     popd
