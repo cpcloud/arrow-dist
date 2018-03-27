@@ -142,21 +142,18 @@ function build_wheel {
     export PYARROW_WITH_ORC=1
     export PYARROW_WITH_JEMALLOC=1
     export PYARROW_WITH_PLASMA=1
-    export PYARROW_BUNDLE_BOOST=1
-    export PYARROW_BUNDLE_ARROW_CPP=1
+    #export PYARROW_BUNDLE_BOOST=1
+    #export PYARROW_BUNDLE_ARROW_CPP=1
     export PYARROW_BUILD_TYPE=Release
-    export PYARROW_CMAKE_OPTIONS="-DBOOST_ROOT=$arrow_boost_dist"
+    export PYARROW_CMAKE_OPTIONS="-DBOOST_ROOT=$arrow_boost_dist -DBoost_NAMESPACE=arrow_boost"
     export SETUPTOOLS_SCM_PRETEND_VERSION=$PYARROW_VERSION
     pushd python
     python setup.py build_ext \
            --with-plasma --with-orc --with-parquet \
-           --bundle-arrow-cpp --bundle-boost --boost-namespace=arrow_boost \
            bdist_wheel
     wheeldir="$PWD/dist"
 
     pip install  'delocate==0.7.3'
-
-    find . -name '*.dylib'
 
     for whl in $wheeldir/*.whl; do
 	unzip -l "$whl"
