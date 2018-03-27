@@ -156,6 +156,8 @@ function build_wheel {
 
     pip install  'delocate==0.7.3'
 
+    find . -name '*.dylib'
+
     for whl in $wheeldir/*.whl; do
 	unzip -l "$whl"
 	delocate-wheel -L . -v "$whl"
